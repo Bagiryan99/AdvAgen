@@ -11,7 +11,8 @@ namespace AdvAgen.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class advertising
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,12 +20,17 @@ namespace AdvAgen.Models
         {
             this.orders = new HashSet<order>();
         }
-    
+        [Display(Name = "Название рекламы")]
         public string name { get; set; }
+        [Display(Name = "Категория")]
         public string category { get; set; }
+        [Display(Name = "Цена")]
         public int price { get; set; }
+        [Display(Name = "Краткое описание")]
         public string briefDescription { get; set; }
+        [Display(Name = "Полное описание")]
         public string fullDescription { get; set; }
+        [Display(Name = "Название акции")]
         public string campaignName { get; set; }
     
         public virtual campaign campaign { get; set; }
