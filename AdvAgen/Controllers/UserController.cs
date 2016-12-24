@@ -78,12 +78,12 @@ namespace AdvAgen.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AspNetRole")] AspNetUser aspNetUser)
+        public ActionResult Edit([Bind(Include = "Id,role")] AspNetUser aspNetUser)
         {
             if (ModelState.IsValid)
             {
                 AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).First();
-                user.AspNetRoles.First().Name = aspNetUser.AspNetRoles.First().Name;
+                user.AspNetRoles.First().Name = aspNetUser.role;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
