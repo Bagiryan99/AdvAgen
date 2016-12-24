@@ -78,7 +78,7 @@ namespace AdvAgen.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id")] AspNetUser aspNetUser)
+        public ActionResult Edit([Bind(Include = "Id,AspNetRole")] AspNetUser aspNetUser)
         {
             if (ModelState.IsValid)
             {

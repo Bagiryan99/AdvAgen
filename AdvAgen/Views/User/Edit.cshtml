@@ -2,6 +2,12 @@
 
 @{
     ViewBag.Title = "Edit";
+    AdvAgen.Models.Entities en = new AdvAgen.Models.Entities();
+    List<SelectListItem> roles = new List<SelectListItem>();
+    foreach (var role in en.AspNetRoles.ToList())
+    {
+        roles.Add(new SelectListItem { Value = role.Name, Text = role.Name });
+    }
 }
 
 <h2>Edit</h2>
@@ -32,7 +38,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.AspNetRoles.First().Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.Editor(ViewBag.role, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.AspNetRoles.First().Name, roles, roles)
                 @Html.ValidationMessageFor(model => model.AspNetRoles.First().Name, "", new { @class = "text-danger" })
             </div>
         </div>
