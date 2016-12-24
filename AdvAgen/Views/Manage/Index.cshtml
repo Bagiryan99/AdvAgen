@@ -1,8 +1,11 @@
 ﻿@model AdvAgen.Models.IndexViewModel
 @using Microsoft.AspNet.Identity;
+
 @{
-    
-    ViewBag.Title = "Управление";
+    ViewBag.Title = "Личный кабинет";
+    AdvAgen.Models.Entities en = new AdvAgen.Models.Entities();
+    String idd = User.Identity.GetUserId();
+    int cusId = en.customers.Where(p => p.userId == idd).First().id;
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -18,7 +21,7 @@
         </dd> 
         <dt>Информация:</dt>
         <dd>
-            [@Html.ActionLink("Редактировать", "../Customer/Edit", new { id = User.Identity.GetUserId()})}]
+            [@Html.ActionLink("Редактировать", "../Customer/Edit", new { id = cusId })]
         </dd>        
     </dl>
 </div>

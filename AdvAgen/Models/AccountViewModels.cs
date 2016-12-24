@@ -74,7 +74,10 @@ namespace AdvAgen.Models
         [Display(Name = "ФИО")]
         public string FIO { get; set; }
 
-        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Псевдоним")]
+        public string Nickname { get; set; }
+
         [DataType(DataType.Text)]
         [Display(Name = "Номер телефона")]
         public string Phone { get; set; }

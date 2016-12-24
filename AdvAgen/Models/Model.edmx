@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -95,6 +95,7 @@
           <Property Name="registrationDate" Type="datetime" Nullable="false" />
           <Property Name="phone" Type="nvarchar" MaxLength="11" />
           <Property Name="userId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="nickname" Type="nvarchar" MaxLength="11" />
         </EntityType>
         <EntityType Name="orders">
           <Key>
@@ -254,8 +255,7 @@
             <End Role="orders" EntitySet="orders" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -353,6 +353,7 @@
           <Property Name="userId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_customers_ToTable" FromRole="customers" ToRole="AspNetUsers" />
           <NavigationProperty Name="orders" Relationship="Self.FK_order_ToTable" FromRole="customers" ToRole="orders" />
+          <Property Name="nickname" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="order">
           <Key>
@@ -571,6 +572,7 @@
           <EntitySetMapping Name="customers">
             <EntityTypeMapping TypeName="Model.customer">
               <MappingFragment StoreEntitySet="customers">
+                <ScalarProperty Name="nickname" ColumnName="nickname" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="fio" ColumnName="fio" />
                 <ScalarProperty Name="registrationDate" ColumnName="registrationDate" />
