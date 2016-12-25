@@ -11,7 +11,8 @@ namespace AdvAgen.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class AspNetUser
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,6 +24,7 @@ namespace AdvAgen.Models
         }
     
         public string Id { get; set; }
+        [Display(Name = "Электронный адрес")]
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PasswordHash { get; set; }
@@ -33,6 +35,7 @@ namespace AdvAgen.Models
         public Nullable<System.DateTime> LockoutEndDateUtc { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
         public string roleId { get; set; }
     

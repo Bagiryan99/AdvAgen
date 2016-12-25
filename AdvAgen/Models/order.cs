@@ -11,12 +11,16 @@ namespace AdvAgen.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class order
     {
+        [Display(Name = "Номер заказа")]
         public int number { get; set; }
         public Nullable<int> customerId { get; set; }
+        [Display(Name = "Название рекламы")]
         public string advertisingName { get; set; }
+        [Display(Name = "Дата создания")]
         public Nullable<System.DateTime> createdDate { get; set; }
         public Nullable<int> statusId { get; set; }
     

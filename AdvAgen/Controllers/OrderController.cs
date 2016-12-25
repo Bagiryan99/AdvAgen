@@ -81,7 +81,7 @@ namespace AdvAgen.Controllers
             }
             return View(order);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Customer")]
         // GET: Order/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -94,8 +94,6 @@ namespace AdvAgen.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.advertisingName = new SelectList(db.advertisings, "name", "category", order.advertisingName);
-            ViewBag.customerId = new SelectList(db.customers, "id", "fio", order.customerId);
             return View(order);
         }
 
@@ -104,16 +102,54 @@ namespace AdvAgen.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "number,customerId,advertisingName,createdDate,status")] order order)
+        public ActionResult Edit([Bind(Include = "number,status")] order order)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
+                order o = db.orders.Where(p => p.number == order.number).FirstOrDefault();
+                o.status = db.statuses.Where(p => p.name == order.status.name).FirstOrDefault();
+                switch (o.status.Id)
+                {
+                    case 1:
+                        {
+                            o.statusId = o.status.Id;
+                            db.Entry(o).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        break;
+                    case 2:
+                        {
+                            o.statusId = o.status.Id;
+                            db.Entry(o).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        break;
+                    case 3:
+                        {
+                            order or = db.orders.Where(p => p.number == o.number).FirstOrDefault();
+                            db.orders.Remove(or);
+                            db.Entry(o).State = EntityState.Deleted;
+                            db.SaveChanges();
+                        }
+                        break;
+                    case 4:
+                        {
+                            order or = db.orders.Where(p => p.number == o.number).FirstOrDefault();
+                            db.orders.Remove(or);
+                            db.Entry(o).State = EntityState.Deleted;
+                            db.SaveChanges();
+                        }
+                        break;
+                    case 5:
+                        {
+                            o.statusId = o.status.Id+1;
+                            db.Entry(o).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        break;
+                }
                 return RedirectToAction("Index");
             }
-            ViewBag.advertisingName = new SelectList(db.advertisings, "name", "category", order.advertisingName);
-            ViewBag.customerId = new SelectList(db.customers, "id", "fio", order.customerId);
             return View(order);
         }
         [Authorize(Roles = "Manager,Customer")]

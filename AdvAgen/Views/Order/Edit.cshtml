@@ -2,6 +2,29 @@
 
 @{
     ViewBag.Title = "Edit";
+    AdvAgen.Models.Entities en = new AdvAgen.Models.Entities();
+    List<SelectListItem> statuses = new List<SelectListItem>();
+    if (User.IsInRole("Manager"))
+    {
+        foreach (var status in en.statuses.ToList())
+        {
+            if (status.Id == 4 || status.Id == 5)
+            {
+                statuses.Add(new SelectListItem { Value = status.name, Text = status.name });
+            }
+        }
+    }
+    if (User.IsInRole("Customer"))
+    {
+        foreach (var status in en.statuses.ToList())
+        {
+            if (status.Id == 2 || status.Id == 3)
+            {
+                statuses.Add(new SelectListItem { Value = status.name, Text = status.name });
+            }
+        }
+    }
+
 }
 
 <h2>Изменение статуса</h2>
@@ -12,53 +35,29 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>order</h4>
+        <h4>Заказ</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.number)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.customerId, "customerId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("customerId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.customerId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.advertisingName, "advertisingName", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("advertisingName", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.advertisingName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.createdDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.createdDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.createdDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.status, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.status.name, statuses, statuses)
                 @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Изменить" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Обратно к списку", "Index")
 </div>
 
 @section Scripts {

@@ -27,7 +27,11 @@
                     @if (User.IsInRole("Customer"))
                     {
                         <li>@Html.ActionLink("Мои заказы", "Index", "Order")</li>
-                    }                   
+                    }
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <li>@Html.ActionLink("Заказы", "Index", "Order")</li>
+                    }                     
                     <li>@Html.ActionLink("Контакты", "Contact", "Home")</li>
                     <li>@Html.ActionLink("О программе", "About", "Home")</li>
                     @if (User.IsInRole("Admin"))
