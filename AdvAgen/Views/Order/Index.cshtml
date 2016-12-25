@@ -4,46 +4,66 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Список заказов</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.createdDate)
+            @Html.DisplayNameFor(model => model.number)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.status)
+            @if (User.IsInRole("Manager"))
+            {
+                @Html.DisplayNameFor(model => model.customer.fio)
+            }
         </th>
         <th>
             @Html.DisplayNameFor(model => model.advertising.category)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.customer.fio)
+            @Html.DisplayNameFor(model => model.advertisingName)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.createdDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>         
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.createdDate)
+            @Html.DisplayNameFor(model => model.number)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.status)
+            @if (User.IsInRole("Manager"))
+            {
+                @Html.DisplayNameFor(model => model.customer.fio)
+            }
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.advertising.category)
+            @Html.DisplayNameFor(model => model.advertising.category)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.customer.fio)
+            @Html.DisplayNameFor(model => model.advertisingName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.number }) |
-            @Html.ActionLink("Details", "Details", new { id=item.number }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.number })
+            @Html.DisplayNameFor(model => model.createdDate)
+        </td>
+        <td>
+            @Html.DisplayNameFor(model => model.status)
+        </td>
+        <td>
+            @if (User.IsInRole("Manager"))
+            {
+                @Html.ActionLink("Изменить статус", "Edit", new { id = item.number })
+            }
+            @Html.ActionLink("Удалить", "Delete", new { id=item.number })
         </td>
     </tr>
 }

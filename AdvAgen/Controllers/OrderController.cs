@@ -15,11 +15,21 @@ namespace AdvAgen.Controllers
     {
         private Entities db = new Entities();
 
+        [Authorize(Roles = "Manager,Customer")]
         // GET: Order
         public ActionResult Index()
         {
-            var orders = db.orders.Include(o => o.advertising).Include(o => o.customer);
-            return View(orders.ToList());
+            if(User.IsInRole("Manager"))
+            {
+                var orders = db.orders.Include(o => o.advertising).Include(o => o.customer);
+                return View(orders.ToList());
+            } else
+            {
+                AspNetUser user = db.AspNetUsers.Where(p => p.UserName == User.Identity.Name).First();
+                customer cus = db.customers.Where(p => p.userId == user.Id).FirstOrDefault();
+                var orders = db.orders.Where(p => p.customerId == cus.id).ToList();
+                return View(orders);
+            }                   
         }
 
         // GET: Order/Details/5
@@ -37,6 +47,7 @@ namespace AdvAgen.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "Customer")]
         // GET: Order/Create
         public ActionResult Create(String advertisingName)
         {
@@ -56,21 +67,19 @@ namespace AdvAgen.Controllers
             if (ModelState.IsValid)
             {
                 order.createdDate = DateTime.Today;
-                order.customer = db.customers.Where(p => p.userId == "83d80599-8a59-487a-9751-035be2c271a4").FirstOrDefault(); //User.Identity.GetUserId()).FirstOrDefault();
+                AspNetUser user = db.AspNetUsers.Where(p => p.UserName == User.Identity.Name).First();
+                order.customer = db.customers.Where(p => p.userId == user.Id).FirstOrDefault();
                 order.customerId = order.customer.id;
                 order.advertising = db.advertisings.Where(p => p.name == order.advertisingName).FirstOrDefault();
                 order.number = db.orders.Max(p => p.number);
                 order.status = "Создан";
                 db.orders.Add(order);
                 db.SaveChanges();
-                return RedirectToAction("../Advertising");
+                return RedirectToAction("Index");
             }
-
-            ViewBag.advertisingName = new SelectList(db.advertisings, "name", "category", order.advertisingName);
-            ViewBag.customerId = new SelectList(db.customers, "id", "fio", order.customerId);
             return View(order);
         }
-
+        [Authorize(Roles = "Manager")]
         // GET: Order/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -105,7 +114,7 @@ namespace AdvAgen.Controllers
             ViewBag.customerId = new SelectList(db.customers, "id", "fio", order.customerId);
             return View(order);
         }
-
+        [Authorize(Roles = "Manager,Customer")]
         // GET: Order/Delete/5
         public ActionResult Delete(int? id)
         {
