@@ -13,7 +13,7 @@ namespace AdvAgen.Controllers
 {
     public class OrderController : Controller
     {
-        private Entities db = new Entities();
+        private Entities db = new Entities();   
 
         [Authorize(Roles = "Manager,Customer")]
         // GET: Order
