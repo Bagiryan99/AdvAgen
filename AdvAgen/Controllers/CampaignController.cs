@@ -21,21 +21,7 @@ namespace AdvAgen.Controllers
             return View(db.campaigns.ToList());
         }
 
-        // GET: Campaign/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            campaign campaign = db.campaigns.Find(id);
-            if (campaign == null)
-            {
-                return HttpNotFound();
-            }
-            return View(campaign);
-        }
-
+        [Authorize(Roles = "Manager")]
         // GET: Campaign/Create
         public ActionResult Create()
         {
@@ -72,7 +58,7 @@ namespace AdvAgen.Controllers
             }
             return View(campaign);
         }
-
+        [Authorize(Roles = "Manager")]
         // GET: Campaign/Edit/5
         public ActionResult Edit(string id)
         {
@@ -103,7 +89,7 @@ namespace AdvAgen.Controllers
             }
             return View(campaign);
         }
-
+        [Authorize(Roles = "Manager")]
         // GET: Campaign/Delete/5
         public ActionResult Delete(string id)
         {

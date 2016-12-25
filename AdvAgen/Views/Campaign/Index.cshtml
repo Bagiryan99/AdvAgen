@@ -7,7 +7,10 @@
 <h2>Список акций</h2>
 
 <p>
-    @Html.ActionLink("Создать новую акцию", "Create")
+    @if (User.IsInRole("Manager"))
+    {
+        @Html.ActionLink("Создать новую акцию", "Create")
+    }    
 </p>
 <table class="table">
     <tr>
@@ -41,8 +44,11 @@
             @Html.DisplayFor(modelItem => item.endDate)
         </td>
         <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.name }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.name })
+            @if (User.IsInRole("Manager"))
+            {
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.name });
+                @Html.ActionLink("Удалить", "Delete", new { id = item.name })
+            }                     
         </td>
     </tr>
 }
