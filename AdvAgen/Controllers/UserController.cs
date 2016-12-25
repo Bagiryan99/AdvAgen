@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AdvAgen.Models;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
 
 namespace AdvAgen.Controllers
 {
@@ -78,13 +80,16 @@ namespace AdvAgen.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,role")] AspNetUser aspNetUser)
+        public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,AspNetRole,role")] AspNetUser aspNetUser)
         {
             if (ModelState.IsValid)
             {
-                AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).First();
-                user.AspNetRoles.First().Name = aspNetUser.role;
-                db.Entry(user).State = EntityState.Modified;
+                //AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).First();
+                String oldRole = db.AspNetRoles.Where(p => p.AspNetUsers.Where(u => u.Id == aspNetUser.Id).FirstOrDefault().Id == aspNetUser.Id).FirstOrDefault().Name;
+                Roles.RemoveUserFromRole(aspNetUser.UserName, oldRole);
+                db.AspNetRoles.Where(p => p.AspNetUsers.Where(u => u.Id == aspNetUser.Id).FirstOrDefault().Id == aspNetUser.Id).FirstOrDefault().Name = aspNetUser.role;
+                Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.role);
+                db.Entry(aspNetUser).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

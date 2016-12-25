@@ -33,6 +33,8 @@
         @Html.HiddenFor(model => model.LockoutEnabled)
         @Html.HiddenFor(model => model.AccessFailedCount)
         @Html.HiddenFor(model => model.UserName)
+        @Html.HiddenFor(model => model.AspNetRoles.First().Id)
+        @Html.HiddenFor(model => model.AspNetRoles.First().Name)
 
         <div class="form-group">
             @Html.LabelFor(model => model.role, htmlAttributes: new { @class = "control-label col-md-2" })

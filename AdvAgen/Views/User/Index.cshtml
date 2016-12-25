@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<AdvAgen.Models.AspNetUser>
-
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Index";
 }
@@ -28,7 +28,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.AspNetRoles.First().Name)
         </td>
-        <td>
+        <td>            
+            @foreach (var rol in Roles.GetRolesForUser(item.UserName))
+            {
+                    @Html.Encode(rol.ToString())
+            }
             @Html.ActionLink("Изменить роль", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Удалить", "Delete", new { id=item.Id })
         </td>
