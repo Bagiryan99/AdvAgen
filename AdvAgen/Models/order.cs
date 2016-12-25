@@ -11,21 +11,17 @@ namespace AdvAgen.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class order
     {
-        [Display(Name = "Номер заказа")]
         public int number { get; set; }
-        public int customerId { get; set; }
-        [Display(Name = "Название рекламы")]
+        public Nullable<int> customerId { get; set; }
         public string advertisingName { get; set; }
-        [Display(Name = "Дата создания")]
-        public System.DateTime createdDate { get; set; }
-        [Display(Name = "Статус")]
-        public string status { get; set; }
+        public Nullable<System.DateTime> createdDate { get; set; }
+        public Nullable<int> statusId { get; set; }
     
         public virtual advertising advertising { get; set; }
         public virtual customer customer { get; set; }
+        public virtual status status { get; set; }
     }
 }

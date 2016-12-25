@@ -11,8 +11,7 @@ namespace AdvAgen.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,14 +21,10 @@ namespace AdvAgen.Models
         }
     
         public int id { get; set; }
-        [Display(Name = "ФИО")]
         public string fio { get; set; }
-        [Display(Name = "Дата регистрации")]
         public System.DateTime registrationDate { get; set; }
-        [Display(Name = "Телефон")]
         public string phone { get; set; }
         public string userId { get; set; }
-        [Display(Name = "Псевдоним")]
         public string nickname { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }

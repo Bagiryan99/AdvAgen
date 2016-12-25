@@ -12,20 +12,18 @@ namespace AdvAgen.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class campaign
+    public partial class status
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public campaign()
+        public status()
         {
-            this.advertisings = new HashSet<advertising>();
+            this.orders = new HashSet<order>();
         }
     
+        public int Id { get; set; }
         public string name { get; set; }
-        public string about { get; set; }
-        public Nullable<System.DateTime> startDate { get; set; }
-        public Nullable<System.DateTime> endDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<advertising> advertisings { get; set; }
+        public virtual ICollection<order> orders { get; set; }
     }
 }

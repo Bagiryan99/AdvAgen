@@ -30,7 +30,7 @@
             @Html.DisplayNameFor(model => model.createdDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.status)
+            @Html.DisplayNameFor(model => model.status.name)
         </th>         
         <th></th>
     </tr>
@@ -56,14 +56,13 @@
             @Html.DisplayFor(model => item.createdDate)
         </td>
         <td>
-            @Html.DisplayFor(model => item.status)
+            @Html.DisplayFor(model => item.status.name)
         </td>
         <td>
-            @if (User.IsInRole("Manager"))
+            @if (User.IsInRole("Manager") || User.IsInRole("Customer"))
             {
                 @Html.ActionLink("Изменить статус", "Edit", new { id = item.number })
             }
-            @Html.ActionLink("Удалить", "Delete", new { id=item.number })
         </td>
     </tr>
 }

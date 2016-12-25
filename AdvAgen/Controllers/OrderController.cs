@@ -51,8 +51,10 @@ namespace AdvAgen.Controllers
         // GET: Order/Create
         public ActionResult Create(String advertisingName)
         {
-            order order = new order();
-            order.advertisingName = advertisingName;
+            order order = new order()
+            {
+                advertisingName = advertisingName
+            };
             ViewBag.o = order;
             return View(order);
         }
@@ -72,7 +74,7 @@ namespace AdvAgen.Controllers
                 order.customerId = order.customer.id;
                 order.advertising = db.advertisings.Where(p => p.name == order.advertisingName).FirstOrDefault();
                 order.number = db.orders.Max(p => p.number);
-                order.status = "Создан";
+                order.statusId = 1;
                 db.orders.Add(order);
                 db.SaveChanges();
                 return RedirectToAction("Index");
