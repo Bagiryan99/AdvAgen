@@ -20,7 +20,7 @@ namespace AdvAgen.Models
         {
             this.orders = new HashSet<order>();
         }
-        [Display(Name = "Название")]
+        [Display(Name = "Название")]        
         public string name { get; set; }
         [Display(Name = "Категория")]
         public string category { get; set; }
