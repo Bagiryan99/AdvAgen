@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using AdvAgen.Models;
+using System.Web.Security;
 
 namespace AdvAgen.Controllers
 {
@@ -175,6 +176,7 @@ namespace AdvAgen.Controllers
                         userId = e.AspNetUsers.Where(p => p.Email == model.Email).First().Id,
                     };
                     e.customers.Add(cus);
+                    Roles.AddUserToRole(cus.AspNetUser.UserName, "Customer");
                     UserManager.AddToRole(cus.userId, "Customer");
                     e.SaveChanges();
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771

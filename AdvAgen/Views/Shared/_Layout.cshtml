@@ -31,13 +31,13 @@
                     @if (User.IsInRole("Manager"))
                     {
                         <li>@Html.ActionLink("Заказы", "Index", "Order")</li>
-                    }                     
-                    <li>@Html.ActionLink("Контакты", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("О программе", "About", "Home")</li>
+                    } 
                     @if (User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Пользователи", "Index", "User")</li>
-                    }
+                    }                    
+                    <li>@Html.ActionLink("Контакты", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("О программе", "About", "Home")</li>                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
