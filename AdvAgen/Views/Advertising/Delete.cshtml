@@ -1,0 +1,72 @@
+﻿@model AdvAgen.Models.advertising
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы уверены что хотите удалить это предложение?</h3>
+<div>
+    <h4>Предложение по рекламе</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.briefDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.briefDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fullDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fullDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.campaign.about)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.campaign.about)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Обратно к списку", "Index")
+        </div>
+    }
+</div>

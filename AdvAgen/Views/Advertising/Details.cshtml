@@ -1,0 +1,61 @@
+﻿@model AdvAgen.Models.advertising
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Подробнее</h2>
+
+<div>
+    <h4>Предложение по рекламе</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.briefDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.briefDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fullDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fullDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.campaignName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.campaignName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @if (User.IsInRole("Manager"))
+    {
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.name })
+    }    
+    @Html.ActionLink("Обратно к списку", "Index")
+</p>
