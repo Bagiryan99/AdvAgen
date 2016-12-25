@@ -5,7 +5,11 @@
     ViewBag.Title = "Личный кабинет";
     AdvAgen.Models.Entities en = new AdvAgen.Models.Entities();
     String idd = User.Identity.GetUserId();
-    int cusId = en.customers.Where(p => p.userId == idd).First().id;
+    int cusId = 0;
+    if (User.IsInRole("Customer"))
+    {
+        cusId = en.customers.Where(p => p.userId == idd).First().id;
+    }
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -19,9 +23,12 @@
         <dd>
             [@Html.ActionLink("Смена пароля", "ChangePassword")]
         </dd>
+        @if (User.IsInRole("Customer"))
+        {
         <dt>Информация:</dt>
         <dd>
             [@Html.ActionLink("Редактировать", "../Customer/Edit", new { id = cusId })]
-        </dd>        
+        </dd>
+        }
     </dl>
 </div>

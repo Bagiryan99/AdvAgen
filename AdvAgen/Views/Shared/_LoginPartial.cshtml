@@ -1,15 +1,23 @@
 ﻿@using Microsoft.AspNet.Identity
+
 @if (Request.IsAuthenticated)
-{
-    String id = User.Identity.GetUserId();
-    AdvAgen.Models.Entities en = new AdvAgen.Models.Entities();
-    String name = en.customers.Where(p => p.userId == id).First().nickname;
+            {
+                String id = User.Identity.GetUserId();
+                AdvAgen.Models.Entities en = new AdvAgen.Models.Entities();
+                String name;
+                if (User.IsInRole("Customer")) {
+                    name = en.customers.Where(p => p.userId == id).First().nickname;
+                } else
+                {
+                    name = User.Identity.Name;
+                }
 
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
         <li>
             @Html.ActionLink("Здравствуйте, " + name, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>

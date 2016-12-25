@@ -9,9 +9,11 @@ using System.Web.Mvc;
 using AdvAgen.Models;
 using System.Web.Security;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity.Validation;
 
 namespace AdvAgen.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private Entities db = new Entities();
@@ -84,14 +86,55 @@ namespace AdvAgen.Controllers
         {
             if (ModelState.IsValid)
             {
-                AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).FirstOrDefault();                
+                AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).FirstOrDefault();
+                String oldRole = user.AspNetRole.Name;                
                 Roles.RemoveUserFromRole(aspNetUser.UserName, user.AspNetRole.Name);
                 Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.AspNetRole.Name);                
                 user.roleId = db.AspNetRoles.Where(p => p.Name == aspNetUser.AspNetRole.Name).FirstOrDefault().Id;
-                String role = user.AspNetRole.Name;
-                if (role == "Admin")           
+                String role = aspNetUser.AspNetRole.Name;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
+                if (oldRole == "Customer")
+                {
+                    customer c = db.customers.Where(p => p.userId == user.Id).FirstOrDefault();
+                    if (c != null)
+                    db.customers.Remove(c);
+                }
+                if (role == "Customer")
+                {
+                    customer cus = new customer
+                    {
+                        AspNetUser = user,
+                        userId = user.Id,
+                        fio = "",
+                        nickname = "",
+                        phone = "",
+                        id = db.customers.Max(p => p.id)+1,
+                        registrationDate = DateTime.Today
+                    };
+                    cus.AspNetUser.roleId = user.roleId;
+                    db.customers.Add(cus);
+                    user.customers.Add(cus);
+                    db.Entry(cus).State = EntityState.Added;
+                }
+                try
+                {
+
+                    db.SaveChanges();
+
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                    {
+                        Response.Write("Object: " + validationError.Entry.Entity.ToString());
+                        Response.Write("");
+                        foreach (DbValidationError err in validationError.ValidationErrors)
+                        {
+                            Response.Write(err.ErrorMessage + "");
+                        }
+                    }
+                }
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
