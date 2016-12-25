@@ -33,14 +33,14 @@
         @Html.HiddenFor(model => model.LockoutEnabled)
         @Html.HiddenFor(model => model.AccessFailedCount)
         @Html.HiddenFor(model => model.UserName)
-        @Html.HiddenFor(model => model.AspNetRoles.First().Id)
-        @Html.HiddenFor(model => model.AspNetRoles.First().Name)
+        @Html.HiddenFor(model => model.roleId)
+        @Html.HiddenFor(model => model.AspNetRole.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.role, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AspNetRole.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.role, roles, roles)
-                @Html.ValidationMessageFor(model => model.role, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.AspNetRole.Name, roles, roles)
+                @Html.ValidationMessageFor(model => model.AspNetRole.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 

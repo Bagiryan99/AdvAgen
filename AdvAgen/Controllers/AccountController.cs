@@ -166,8 +166,7 @@ namespace AdvAgen.Controllers
                         nick = model.Nickname;
                     }
                     customer cus = new customer()
-                    {
-                        
+                    {                        
                         nickname = nick,
                         phone = model.Phone,
                         fio = model.FIO,

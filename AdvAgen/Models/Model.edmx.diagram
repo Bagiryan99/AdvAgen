@@ -10,7 +10,7 @@
         <EntityTypeShape EntityType="Model.AspNetRole" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.75" PointX="3" PointY="3" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.campaign" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.customer" Width="1.5" PointX="5.25" PointY="6.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.order" Width="1.5" PointX="7.5" PointY="6.5" IsExpanded="true" />
@@ -20,7 +20,7 @@
         <AssociationConnector Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_customers_ToTable" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_order_ToTable" ManuallyRouted="false" />
-        <AssociationConnector Association="Model.AspNetUserRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_AspNetUsers_ToTable" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

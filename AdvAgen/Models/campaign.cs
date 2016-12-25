@@ -11,8 +11,7 @@ namespace AdvAgen.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class campaign
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,14 +19,10 @@ namespace AdvAgen.Models
         {
             this.advertisings = new HashSet<advertising>();
         }
-
-        [Display(Name = "Название акции")]
+    
         public string name { get; set; }
-        [Display(Name = "Подробнее")]
         public string about { get; set; }
-        [Display(Name = "Дата начала")]
         public System.DateTime startDate { get; set; }
-        [Display(Name = "Дата окончания")]
         public System.DateTime endDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

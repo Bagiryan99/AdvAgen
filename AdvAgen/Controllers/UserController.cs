@@ -60,6 +60,7 @@ namespace AdvAgen.Controllers
             return View(aspNetUser);
         }
 
+        static String oldRole { get; set; }
         // GET: User/Edit/5
         public ActionResult Edit(string id)
         {
@@ -68,6 +69,7 @@ namespace AdvAgen.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AspNetUser aspNetUser = db.AspNetUsers.Find(id);
+            oldRole = aspNetUser.AspNetRole.Name;
             if (aspNetUser == null)
             {
                 return HttpNotFound();
@@ -80,15 +82,12 @@ namespace AdvAgen.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,AspNetRole,role")] AspNetUser aspNetUser)
+        public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,roleId,AspNetRole,role")] AspNetUser aspNetUser)
         {
             if (ModelState.IsValid)
             {
-                //AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).First();
-                String oldRole = db.AspNetRoles.Where(p => p.AspNetUsers.Where(u => u.Id == aspNetUser.Id).FirstOrDefault().Id == aspNetUser.Id).FirstOrDefault().Name;
                 Roles.RemoveUserFromRole(aspNetUser.UserName, oldRole);
-                db.AspNetRoles.Where(p => p.AspNetUsers.Where(u => u.Id == aspNetUser.Id).FirstOrDefault().Id == aspNetUser.Id).FirstOrDefault().Name = aspNetUser.role;
-                Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.role);
+                Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.AspNetRole.Name);
                 db.Entry(aspNetUser).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
