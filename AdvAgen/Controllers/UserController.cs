@@ -60,7 +60,6 @@ namespace AdvAgen.Controllers
             return View(aspNetUser);
         }
 
-        static String oldRole { get; set; }
         // GET: User/Edit/5
         public ActionResult Edit(string id)
         {
@@ -69,7 +68,6 @@ namespace AdvAgen.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AspNetUser aspNetUser = db.AspNetUsers.Find(id);
-            oldRole = aspNetUser.AspNetRole.Name;
             if (aspNetUser == null)
             {
                 return HttpNotFound();
@@ -86,9 +84,13 @@ namespace AdvAgen.Controllers
         {
             if (ModelState.IsValid)
             {
-                Roles.RemoveUserFromRole(aspNetUser.UserName, oldRole);
-                Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.AspNetRole.Name);
-                db.Entry(aspNetUser).State = EntityState.Modified;
+                AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).FirstOrDefault();                
+                Roles.RemoveUserFromRole(aspNetUser.UserName, user.AspNetRole.Name);
+                Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.AspNetRole.Name);                
+                user.roleId = db.AspNetRoles.Where(p => p.Name == aspNetUser.AspNetRole.Name).FirstOrDefault().Id;
+                String role = user.AspNetRole.Name;
+                if (role == "Admin")           
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
