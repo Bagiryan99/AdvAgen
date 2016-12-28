@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using AdvAgen.Models;
 using System.Web.Security;
+using System.Data.Entity.Validation;
 
 namespace AdvAgen.Controllers
 {
@@ -178,7 +179,20 @@ namespace AdvAgen.Controllers
                     e.customers.Add(cus);
                     Roles.AddUserToRole(cus.AspNetUser.UserName, "Customer");
                     UserManager.AddToRole(cus.userId, "Customer");
-                    e.SaveChanges();
+                    try
+                    {
+                        e.SaveChanges();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                        {
+                            foreach (DbValidationError err in validationError.ValidationErrors)
+                            {
+                                Logger.Log.Error("Произошла ошибка при создании клиента" + cus.fio + "Ошибка:" + err.ErrorMessage);
+                            }
+                        }
+                    }
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Отправка сообщения электронной почты с этой ссылкой
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

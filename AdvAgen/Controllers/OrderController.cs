@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AdvAgen.Models;
+using System.Data.Entity.Validation;
 
 namespace AdvAgen.Controllers
 {
@@ -61,8 +62,21 @@ namespace AdvAgen.Controllers
                 order.number = db.orders.Max(p => p.number);
                 order.statusId = 1;
                 db.orders.Add(order);
-                db.SaveChanges();
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " создал заказ №" + order.number);
+                try
+                {
+                    db.SaveChanges();
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " создал заказ №" + order.number);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                    {
+                        foreach (DbValidationError err in validationError.ValidationErrors)
+                        {
+                            Logger.Log.Error("Произошла ошибка при создании заказа" + order.number + "Ошибка:" + err.ErrorMessage);
+                        }
+                    }
+                }                
                 return RedirectToAction("Index");
             }
             return View(order);
@@ -94,47 +108,61 @@ namespace AdvAgen.Controllers
             {
                 order o = db.orders.Where(p => p.number == order.number).FirstOrDefault();
                 o.status = db.statuses.Where(p => p.name == order.status.name).FirstOrDefault();
-                switch (o.status.Id)
+                try
                 {
-                    case 1:
-                        {
-                            o.statusId = o.status.Id;
-                            db.Entry(o).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        break;
-                    case 2:
-                        {
-                            o.statusId = o.status.Id;
-                            db.Entry(o).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        break;
-                    case 3:
-                        {
-                            order or = db.orders.Where(p => p.number == o.number).FirstOrDefault();
-                            db.orders.Remove(or);
-                            db.Entry(o).State = EntityState.Deleted;
-                            db.SaveChanges();
-                        }
-                        break;
-                    case 4:
-                        {
-                            order or = db.orders.Where(p => p.number == o.number).FirstOrDefault();
-                            db.orders.Remove(or);
-                            db.Entry(o).State = EntityState.Deleted;
-                            db.SaveChanges();
-                        }
-                        break;
-                    case 5:
-                        {
-                            o.statusId = o.status.Id+1;
-                            db.Entry(o).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        break;
+                    switch (o.status.Id)
+                    {
+                        case 1:
+                            {
+                                o.statusId = o.status.Id;
+                                db.Entry(o).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            break;
+                        case 2:
+                            {
+                                o.statusId = o.status.Id;
+                                db.Entry(o).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            break;
+                        case 3:
+                            {
+                                order or = db.orders.Where(p => p.number == o.number).FirstOrDefault();
+                                db.orders.Remove(or);
+                                db.Entry(o).State = EntityState.Deleted;
+                                db.SaveChanges();
+                            }
+                            break;
+                        case 4:
+                            {
+                                order or = db.orders.Where(p => p.number == o.number).FirstOrDefault();
+                                db.orders.Remove(or);
+                                db.Entry(o).State = EntityState.Deleted;
+                                db.SaveChanges();
+                            }
+                            break;
+                        case 5:
+                            {
+                                o.statusId = o.status.Id + 1;
+                                o.status = db.statuses.Where(p => p.Id == o.statusId).First();
+                                db.Entry(o).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            break;
+                    }
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " изменил состояние заказа №" + order.number);
                 }
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " изменил состояние заказа №" + order.number);
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                    {
+                        foreach (DbValidationError err in validationError.ValidationErrors)
+                        {
+                            Logger.Log.Error("Произошла ошибка при изменении статуса заказа" + order.number + "на статус"+ o.status + "Ошибка:" + err.ErrorMessage);
+                        }
+                    }
+                }                         
                 return RedirectToAction("Index");
             }
             return View(order);

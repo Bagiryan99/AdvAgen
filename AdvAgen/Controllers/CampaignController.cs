@@ -42,20 +42,18 @@ namespace AdvAgen.Controllers
                 try
                 {
                     db.SaveChanges();
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " создал акцию " + campaign.name);
                 }
                 catch (DbEntityValidationException ex)
                 {
                     foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
                     {
-                        Response.Write("Object: " + validationError.Entry.Entity.ToString());
-                        Response.Write("");
                         foreach (DbValidationError err in validationError.ValidationErrors)
                         {
-                            Response.Write(err.ErrorMessage + "");
+                            Logger.Log.Error("Произошла ошибка при добавлении акции " + campaign.name + "Ошибка:" + err.ErrorMessage);
                         }
                     }
-                }
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " создал акцию " + campaign.name);
+                }                
                 return RedirectToAction("Index");
             }
             return View(campaign);
@@ -86,8 +84,21 @@ namespace AdvAgen.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(campaign).State = EntityState.Modified;
-                db.SaveChanges();
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " отредактировал акцию " + campaign.name);
+                try
+                {
+                    db.SaveChanges();
+                    Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " отредактировал акцию " + campaign.name);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                    {
+                        foreach (DbValidationError err in validationError.ValidationErrors)
+                        {
+                            Logger.Log.Error("Произошла ошибка при редактировании акции " + campaign.name + "Ошибка:" + err.ErrorMessage);
+                        }
+                    }
+                }                
                 return RedirectToAction("Index");
             }
             return View(campaign);
@@ -115,8 +126,21 @@ namespace AdvAgen.Controllers
         {
             campaign campaign = db.campaigns.Find(id);
             db.campaigns.Remove(campaign);
-            db.SaveChanges();
-            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил акцию " + campaign.name);
+            try
+            {
+                db.SaveChanges();
+                Logger.Log.Info("Пользователь " + User.Identity.Name + " удалил акцию " + campaign.name);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                {
+                    foreach (DbValidationError err in validationError.ValidationErrors)
+                    {
+                        Logger.Log.Error("Произошла ошибка при удалении акции " + campaign.name + "Ошибка:" + err.ErrorMessage);
+                    }
+                }
+            }            
             return RedirectToAction("Index");
         }
 

@@ -59,20 +59,19 @@ namespace AdvAgen.Controllers
                 try
                 {
                     db.SaveChanges();
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " создал рекламу " + advertising.name);
                 }
                 catch (DbEntityValidationException ex)
                 {
                     foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
                     {
-                        Response.Write("Object: " + validationError.Entry.Entity.ToString());
-                        Response.Write("");
                         foreach (DbValidationError err in validationError.ValidationErrors)
                         {
-                            Response.Write(err.ErrorMessage + "");
+                            Logger.Log.Error("Произошла ошибка при создании рекламы " + advertising.name + "Ошибка:" + err.ErrorMessage);
                         }
-                    }
+                   }
                 }
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил рекламу " + advertising.name);
+                
                 return RedirectToAction("Index");
             }
 
@@ -107,11 +106,24 @@ namespace AdvAgen.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(advertising).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " изменил рекламу " + advertising.name);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                    {
+                        foreach (DbValidationError err in validationError.ValidationErrors)
+                        {
+                            Logger.Log.Error("Произошла ошибка при редактировании рекламы  " + advertising.name + "Ошибка:" + err.ErrorMessage);
+                        }
+                    }
+                }
                 return RedirectToAction("Index");
             }
-            ViewBag.campaignName = new SelectList(db.campaigns, "name", "name", advertising.campaignName);
-            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " изменил рекламу " + advertising.name);
+            //ViewBag.campaignName = new SelectList(db.campaigns, "name", "name", advertising.campaignName);            
             return View(advertising);
         }
 
@@ -138,8 +150,21 @@ namespace AdvAgen.Controllers
         {
             advertising advertising = db.advertisings.Find(id);
             db.advertisings.Remove(advertising);
-            db.SaveChanges();
-            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил рекламу " + advertising.name);
+            try
+            {
+                db.SaveChanges();
+                Logger.Log.Info("Пользователь " + User.Identity.Name + " удалил рекламу " + advertising.name);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                {
+                    foreach (DbValidationError err in validationError.ValidationErrors)
+                    {
+                        Logger.Log.Error("Произошла ошибка при удалении рекламы  " + advertising.name + "Ошибка:" + err.ErrorMessage);
+                    }
+                }
+            }            
             return RedirectToAction("Index");
         }
 

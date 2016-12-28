@@ -85,20 +85,18 @@ namespace AdvAgen.Controllers
                 try
                 {
                     db.SaveChanges();
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " изменил информацию о пользователе " + aspNetUser.Email);
                 }
                 catch (DbEntityValidationException ex)
                 {
                     foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
                     {
-                        Response.Write("Object: " + validationError.Entry.Entity.ToString());
-                        Response.Write("");
                         foreach (DbValidationError err in validationError.ValidationErrors)
                         {
-                            Response.Write(err.ErrorMessage + "");
+                            Logger.Log.Error("Произошла ошибка при изменении роли у пользователя" + aspNetUser.Email + "Ошибка:" + err.ErrorMessage);
                         }
                     }
-                }
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " изменил информацию о пользователе " + aspNetUser.Email);
+                }                
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
@@ -128,8 +126,21 @@ namespace AdvAgen.Controllers
             db.orders.RemoveRange(aspNetUser.customers.First().orders.ToList());
             db.customers.Remove(aspNetUser.customers.First());
             db.AspNetUsers.Remove(aspNetUser);
-            db.SaveChanges();
-            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил пользователя " + aspNetUser.Email);
+            try
+            {
+                db.SaveChanges();
+                Logger.Log.Info("Пользователь " + User.Identity.Name + " удалил пользователя " + aspNetUser.Email);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                {
+                    foreach (DbValidationError err in validationError.ValidationErrors)
+                    {
+                        Logger.Log.Error("Произошла ошибка при удалении пользователя" + aspNetUser.Email + "Ошибка:" + err.ErrorMessage);
+                    }
+                }
+            }            
             return RedirectToAction("Index");
         }
 

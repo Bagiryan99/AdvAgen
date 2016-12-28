@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AdvAgen.Models;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity.Validation;
 
 namespace AdvAgen.Controllers
 {
@@ -66,8 +67,21 @@ namespace AdvAgen.Controllers
                 customer.AspNetUser = db.AspNetUsers.Where(p => p.Id == customer.userId).First();
                 customer.AspNetUser.UserName = username;
                 db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
-                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " отредактировал информацию о клиенте " + customer.fio);
+                try
+                {
+                    db.SaveChanges();
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " отредактировал информацию о клиенте " + customer.fio);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (DbEntityValidationResult validationError in ex.EntityValidationErrors)
+                    {
+                        foreach (DbValidationError err in validationError.ValidationErrors)
+                        {
+                            Logger.Log.Error("Произошла ошибка при редактировании информации о клиенте " + customer.fio + "Ошибка:" + err.ErrorMessage);
+                        }
+                    }
+                }                
                 return RedirectToAction("Index");
             }
             ViewBag.userId = new SelectList(db.AspNetUsers, "Id", "Email", customer.userId);
