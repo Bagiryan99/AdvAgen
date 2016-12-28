@@ -29,6 +29,7 @@ namespace AdvAgen.Models
         [Display(Name = "Краткое описание")]
         public string briefDescription { get; set; }
         [Display(Name = "Полное описание")]
+        [MaxLength(150)]
         public string fullDescription { get; set; }
         [Display(Name = "Акция")]
         public string campaignName { get; set; }

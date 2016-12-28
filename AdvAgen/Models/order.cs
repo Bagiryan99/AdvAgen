@@ -23,9 +23,11 @@ namespace AdvAgen.Models
         [Display(Name = "Дата создания")]
         public Nullable<System.DateTime> createdDate { get; set; }
         public Nullable<int> statusId { get; set; }
-    
+        [Display(Name = "Реклама")]
         public virtual advertising advertising { get; set; }
+        [Display(Name = "Заказчик")]
         public virtual customer customer { get; set; }
+        [Display(Name = "Статус")]
         public virtual status status { get; set; }
     }
 }

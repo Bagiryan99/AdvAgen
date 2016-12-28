@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Предложение о &laquo;@Html.HiddenFor(model => model.name)&raquo;</h4>
+        <h4>Предложение о &laquo;@Html.DisplayFor(model => model.name)&raquo;</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.name)
@@ -52,7 +52,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.campaignName, "campaignName", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("campaignName", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("Название акции", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.campaignName, "", new { @class = "text-danger" })
             </div>
         </div>

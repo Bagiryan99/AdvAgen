@@ -54,7 +54,7 @@
             {
                 @Html.ActionLink("Редактировать | ", "Edit", new { id = item.name })
             }
-            @Html.ActionLink("Подробнее", "Details", new { id=item.name })
+            @Html.ActionLink("Подробнее", "Details", new { id = item.name })
             @if (User.IsInRole("Customer"))
             {
                 @Html.ActionLink(" | Заказать", "../Order/Create", new { advertisingName = item.name })

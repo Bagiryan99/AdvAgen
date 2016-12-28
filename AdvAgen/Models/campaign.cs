@@ -24,6 +24,7 @@ namespace AdvAgen.Models
         [MaxLength(40)]
         public string name { get; set; }
         [Display(Name = "Описание")]
+        [MaxLength(150)]
         public string about { get; set; }
         [Display(Name = "Дата начала")]
         [DataType(DataType.Date)]

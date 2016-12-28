@@ -50,7 +50,7 @@ namespace AdvAgen.Controllers
             {
                 AspNetUser user = db.AspNetUsers.Where(p => p.Id == aspNetUser.Id).FirstOrDefault();
                 String oldRole = user.AspNetRole.Name;                
-                Roles.RemoveUserFromRole(aspNetUser.UserName, user.AspNetRole.Name);
+                Roles.RemoveUserFromRole(aspNetUser.UserName, oldRole);
                 Roles.AddUserToRole(aspNetUser.UserName, aspNetUser.AspNetRole.Name);                
                 user.roleId = db.AspNetRoles.Where(p => p.Name == aspNetUser.AspNetRole.Name).FirstOrDefault().Id;
                 String role = aspNetUser.AspNetRole.Name;
@@ -85,7 +85,7 @@ namespace AdvAgen.Controllers
                 try
                 {
                     db.SaveChanges();
-                    Logger.Log.Info("Пользователь " + User.Identity.Name + " изменил информацию о пользователе " + aspNetUser.Email);
+                    Logger.Log.Info("Пользователь " + User.Identity.Name + " изменил роль пользователя " + aspNetUser.Email);
                 }
                 catch (DbEntityValidationException ex)
                 {
