@@ -98,7 +98,10 @@ namespace AdvAgen.Controllers
                 {
                     customer c = db.customers.Where(p => p.userId == user.Id).FirstOrDefault();
                     if (c != null)
-                    db.customers.Remove(c);
+                    {
+                        db.orders.RemoveRange(c.orders.ToList());
+                        db.customers.Remove(c);
+                    }                    
                 }
                 if (role == "Customer")
                 {
@@ -161,6 +164,8 @@ namespace AdvAgen.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             AspNetUser aspNetUser = db.AspNetUsers.Find(id);
+            db.orders.RemoveRange(aspNetUser.customers.First().orders.ToList());
+            db.customers.Remove(aspNetUser.customers.First());
             db.AspNetUsers.Remove(aspNetUser);
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -52,7 +52,10 @@
 }
 
 <div>
-    @Html.ActionLink("Обратно к списку", "Index")
+    @if (!User.IsInRole("Customer"))
+    {
+        @Html.ActionLink("Обратно к списку", "Index")
+    }    
 </div>
 
 @section Scripts {

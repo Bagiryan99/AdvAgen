@@ -54,11 +54,14 @@
             {
                 @Html.ActionLink("Редактировать", "Edit", new { id = item.name })
             }
-            @Html.ActionLink("Подробнее", "Details", new { id=item.name })
-            @Html.ActionLink("Заказать", "../Order/Create", new { advertisingName = item.name })
+            @Html.ActionLink(" | Подробнее", "Details", new { id=item.name })
+            @if (User.IsInRole("Customer"))
+            {
+                @Html.ActionLink(" | Заказать", "../Order/Create", new { advertisingName = item.name })
+            }
             @if (User.IsInRole("Manager"))
             {
-                @Html.ActionLink("Удалить", "Delete", new { id = item.name })
+                @Html.ActionLink(" | Удалить", "Delete", new { id = item.name })
             }
         </td>
     </tr>

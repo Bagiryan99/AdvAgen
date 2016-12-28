@@ -28,13 +28,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.AspNetRole.Name)
         </td>
-        <td>            
-            @foreach (var rol in Roles.GetRolesForUser(item.UserName))
+        <td>  
+            @if (item.Email != "admin@yandex.ru")
             {
-                    @Html.Encode(rol.ToString())
-            }
-            @Html.ActionLink("Изменить роль", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.Id })
+                @Html.ActionLink("Изменить роль", "Edit", new { id = item.Id });
+                @Html.ActionLink(" | Удалить", "Delete", new { id = item.Id });
+            }        
         </td>
     </tr>
 }

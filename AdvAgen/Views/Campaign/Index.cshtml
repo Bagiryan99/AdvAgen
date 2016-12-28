@@ -46,8 +46,8 @@
         <td>
             @if (User.IsInRole("Manager"))
             {
-                @Html.ActionLink("Редактировать ", "Edit", new { id = item.name });
-                @Html.ActionLink(" Удалить", "Delete", new { id = item.name })
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.name });
+                @Html.ActionLink(" | Удалить", "Delete", new { id = item.name })
             }                     
         </td>
     </tr>
