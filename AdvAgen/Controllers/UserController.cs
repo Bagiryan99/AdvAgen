@@ -24,44 +24,6 @@ namespace AdvAgen.Controllers
             return View(db.AspNetUsers.ToList());
         }
 
-        // GET: User/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AspNetUser aspNetUser = db.AspNetUsers.Find(id);
-            if (aspNetUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(aspNetUser);
-        }
-
-        // GET: User/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: User/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] AspNetUser aspNetUser)
-        {
-            if (ModelState.IsValid)
-            {
-                db.AspNetUsers.Add(aspNetUser);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(aspNetUser);
-        }
-
         // GET: User/Edit/5
         public ActionResult Edit(string id)
         {
@@ -122,9 +84,7 @@ namespace AdvAgen.Controllers
                 }
                 try
                 {
-
                     db.SaveChanges();
-
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -138,6 +98,7 @@ namespace AdvAgen.Controllers
                         }
                     }
                 }
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " изменил информацию о пользователе " + aspNetUser.Email);
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
@@ -168,6 +129,7 @@ namespace AdvAgen.Controllers
             db.customers.Remove(aspNetUser.customers.First());
             db.AspNetUsers.Remove(aspNetUser);
             db.SaveChanges();
+            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил пользователя " + aspNetUser.Email);
             return RedirectToAction("Index");
         }
 

@@ -32,21 +32,6 @@ namespace AdvAgen.Controllers
             }                   
         }
 
-        // GET: Order/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            order order = db.orders.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
         [Authorize(Roles = "Customer")]
         // GET: Order/Create
         public ActionResult Create(String advertisingName)
@@ -77,6 +62,7 @@ namespace AdvAgen.Controllers
                 order.statusId = 1;
                 db.orders.Add(order);
                 db.SaveChanges();
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " создал заказ №" + order.number);
                 return RedirectToAction("Index");
             }
             return View(order);
@@ -148,37 +134,12 @@ namespace AdvAgen.Controllers
                         }
                         break;
                 }
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " изменил состояние заказа №" + order.number);
                 return RedirectToAction("Index");
             }
             return View(order);
         }
-        [Authorize(Roles = "Manager,Customer")]
-        // GET: Order/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            order order = db.orders.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
-        // POST: Order/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            order order = db.orders.Find(id);
-            db.orders.Remove(order);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

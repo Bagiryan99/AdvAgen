@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AdvAgen.Models;
+using Microsoft.AspNet.Identity;
 
 namespace AdvAgen.Controllers
 {
@@ -34,32 +35,7 @@ namespace AdvAgen.Controllers
                 return HttpNotFound();
             }
             return View(customer);
-        }
-
-        // GET: Customer/Create
-        public ActionResult Create()
-        {
-            ViewBag.userId = new SelectList(db.AspNetUsers, "Id", "Email");
-            return View();
-        }
-
-        // POST: Customer/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,fio,registrationDate,phone,userId")] customer customer)
-        {
-            if (ModelState.IsValid)
-            {
-                db.customers.Add(customer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.userId = new SelectList(db.AspNetUsers, "Id", "Email", customer.userId);
-            return View(customer);
-        }
+        }        
 
         // GET: Customer/Edit/5
         public ActionResult Edit(int? id)
@@ -91,36 +67,11 @@ namespace AdvAgen.Controllers
                 customer.AspNetUser.UserName = username;
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " отредактировал информацию о клиенте " + customer.fio);
                 return RedirectToAction("Index");
             }
             ViewBag.userId = new SelectList(db.AspNetUsers, "Id", "Email", customer.userId);
             return View(customer);
-        }
-
-        // GET: Customer/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            customer customer = db.customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
-        }
-
-        // POST: Customer/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            customer customer = db.customers.Find(id);
-            db.customers.Remove(customer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

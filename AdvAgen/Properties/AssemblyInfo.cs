@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("© , 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: log4net.Config.XmlConfigurator(Watch = true)] // THIS IS LOGGER!
+
 
 // Установка значения False в параметре ComVisible делает типы в этой сборке невидимыми
 // для компонентов COM.  Если требуется обратиться к типу в этой сборке через

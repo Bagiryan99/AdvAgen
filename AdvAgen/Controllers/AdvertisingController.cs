@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AdvAgen.Models;
 using System.Data.Entity.Validation;
+using Microsoft.AspNet.Identity;
 
 namespace AdvAgen.Controllers
 {
@@ -71,10 +72,11 @@ namespace AdvAgen.Controllers
                         }
                     }
                 }
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил рекламу " + advertising.name);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.campaignName = new SelectList(db.campaigns, "name", "name", advertising.campaignName);
+            ViewBag.campaignName = new SelectList(db.campaigns, "name", "name", advertising.campaignName);           
             return View(advertising);
         }
 
@@ -109,6 +111,7 @@ namespace AdvAgen.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.campaignName = new SelectList(db.campaigns, "name", "name", advertising.campaignName);
+            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " изменил рекламу " + advertising.name);
             return View(advertising);
         }
 
@@ -136,6 +139,7 @@ namespace AdvAgen.Controllers
             advertising advertising = db.advertisings.Find(id);
             db.advertisings.Remove(advertising);
             db.SaveChanges();
+            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил рекламу " + advertising.name);
             return RedirectToAction("Index");
         }
 

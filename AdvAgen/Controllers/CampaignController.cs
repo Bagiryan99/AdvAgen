@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AdvAgen.Models;
 using System.Data.Entity.Validation;
+using Microsoft.AspNet.Identity;
 
 namespace AdvAgen.Controllers
 {
@@ -54,6 +55,7 @@ namespace AdvAgen.Controllers
                         }
                     }
                 }
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " создал акцию " + campaign.name);
                 return RedirectToAction("Index");
             }
             return View(campaign);
@@ -85,6 +87,7 @@ namespace AdvAgen.Controllers
             {
                 db.Entry(campaign).State = EntityState.Modified;
                 db.SaveChanges();
+                Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " отредактировал акцию " + campaign.name);
                 return RedirectToAction("Index");
             }
             return View(campaign);
@@ -113,6 +116,7 @@ namespace AdvAgen.Controllers
             campaign campaign = db.campaigns.Find(id);
             db.campaigns.Remove(campaign);
             db.SaveChanges();
+            Logger.Log.Info("Пользователь" + User.Identity.GetUserId() + " удалил акцию " + campaign.name);
             return RedirectToAction("Index");
         }
 
